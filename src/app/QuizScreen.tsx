@@ -10,7 +10,8 @@ import React from "react";
 import QuestionCard from "../components/QuestionCard";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import questions from "../questions";
-const question = questions[1];
+import Card from "../components/Card";
+const question = questions[-4];
 const QuizScreen = () => {
   return (
     <SafeAreaView style={styles.page}>
@@ -20,10 +21,16 @@ const QuizScreen = () => {
           <Text style={styles.title}>Question 1</Text>
         </View>
         {/* body */}
-        <View>
-          <QuestionCard question={question} />
-          <Text style={styles.time}>20sec</Text>
-        </View>
+        {question ? (
+          <View>
+            <QuestionCard question={question} />
+            <Text style={styles.time}>20sec</Text>
+          </View>
+        ) : (
+          <Card title="well done">
+            <Text>Correct answers :- 3/5</Text>
+          </Card>
+        )}
         {/* footer */}
         <Pressable
           onPress={() => {
