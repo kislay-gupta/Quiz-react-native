@@ -9,7 +9,8 @@ import {
 import React from "react";
 import QuestionCard from "../components/QuestionCard";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-
+import questions from "../questions";
+const question = questions[1];
 const QuizScreen = () => {
   return (
     <SafeAreaView style={styles.page}>
@@ -20,7 +21,7 @@ const QuizScreen = () => {
         </View>
         {/* body */}
         <View>
-          <QuestionCard />
+          <QuestionCard question={question} />
           <Text style={styles.time}>20sec</Text>
         </View>
         {/* footer */}
