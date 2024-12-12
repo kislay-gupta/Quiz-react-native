@@ -6,16 +6,37 @@ import {
   Button,
   Pressable,
 } from "react-native";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import QuestionCard from "../components/QuestionCard";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import questions from "../questions";
 import Card from "../components/Card";
 import CustomButton from "../components/CustomButton";
 import { QuizContext, useQuizContext } from "../providers/QuizProvider";
+import { useTimer } from "../hooks/useTimer";
+import LottieView from "lottie-react-native";
+
 const QuizScreen = () => {
-  const { question, questionIndex, onNextClick, score, totalQuestion } =
-    useQuizContext();
+  const {
+    question,
+    questionIndex,
+    onNextClick,
+    score,
+    totalQuestion,
+    bestScore,
+  } = useQuizContext();
+  const { time, startTimer, clearTimer } = useTimer();
+  useEffect(() => {
+    startTimer();
+    return () => {
+      clearTimer();
+    };
+  }, [question]);
+  useEffect(() => {
+    if (question && time <= 0) {
+      onNextClick();
+    }
+  }, [time]);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -30,14 +51,23 @@ const QuizScreen = () => {
         {question ? (
           <View>
             <QuestionCard question={question} />
-            <Text style={styles.time}>20sec</Text>
+            <Text style={styles.time}>{time}</Text>
           </View>
         ) : (
-          <Card title="well done">
-            <Text>
-              Correct answers {score}/{totalQuestion}
-            </Text>
-          </Card>
+          <>
+            <LottieView
+              source={require("../../assets/party.json")}
+              style={StyleSheet.absoluteFill}
+              autoPlay
+              loop={false}
+            />
+            <Card title="well done">
+              <Text>
+                Correct answers {score}/{totalQuestion}
+              </Text>
+              <Text>best answers {bestScore}</Text>
+            </Card>
+          </>
         )}
         <CustomButton
           title="Next"
