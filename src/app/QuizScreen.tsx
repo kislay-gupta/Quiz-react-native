@@ -6,20 +6,25 @@ import {
   Button,
   Pressable,
 } from "react-native";
-import React from "react";
+import React, { useState, useContext } from "react";
 import QuestionCard from "../components/QuestionCard";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import questions from "../questions";
 import Card from "../components/Card";
 import CustomButton from "../components/CustomButton";
-const question = questions[4];
+import { QuizContext, useQuizContext } from "../providers/QuizProvider";
 const QuizScreen = () => {
+  const { question, questionIndex, onNextClick, score, totalQuestion } =
+    useQuizContext();
+
   return (
     <SafeAreaView style={styles.page}>
       <View style={styles.container}>
         {/* header */}
         <View>
-          <Text style={styles.title}>Question 1</Text>
+          <Text style={styles.title}>
+            Question {questionIndex + 1}/{totalQuestion}
+          </Text>
         </View>
         {/* body */}
         {question ? (
@@ -29,13 +34,14 @@ const QuizScreen = () => {
           </View>
         ) : (
           <Card title="well done">
-            <Text>Correct answers 3/5</Text>
+            <Text>
+              Correct answers {score}/{totalQuestion}
+            </Text>
           </Card>
         )}
         <CustomButton
           title="Next"
-          onPress={() => console.warn("custom on press")}
-          onLongPress={() => console.warn("long press")}
+          onPress={() => onNextClick()}
           rightIcon={
             <FontAwesome6 name="arrow-right-long" size={16} color="white" />
           }
